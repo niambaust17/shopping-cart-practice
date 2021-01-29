@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <title>Shopping Cart</title>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet" />
+   <link href="style.css" rel="stylesheet">
+</head>
+
+<body>
+
+   <section id="cart-view">
+      <div class="container">
+         <div class="cart">
+            <div class="col-md-12 col-lg-10 mx-auto">
+               <div class="cart-item" id="cart-1">
+                  <div class="row">
+                     <div class="col-md-7 center-item">
+                        <img src="images/product-1.png" alt="">
+                        <h5>iPhone 11 128GB Black</h5>
+                     </div>
+
+                     <div class="col-md-5 center-item">
+                        <div class="input-group number-spinner">
+                           <button onclick="productCount(false, 'item1')" id="item1-decrement"
+                              class="btn btn-default"><i class="fas fa-minus"></i></button>
+                           <input id="total-item1" type="text" class="form-control text-center" value="1">
+                           <button onclick="productCount(true, 'item1')" id="item1-increment" class="btn btn-default"><i
+                                 class="fas fa-plus"></i></button>
+                        </div>
+                        <h5 id="item1-price">$1219</h5>
+                        <img onclick="removeItem('item-1', 'cart-1')" src="images/remove.png" alt=""
+                           class="remove-item">
+                     </div>
+                  </div>
+               </div>
+
+               <div class="cart-item" id="cart-2">
+                  <div class="row">
+                     <div class="col-md-7 center-item mx-auto">
+                        <img src="images/product-2.png" alt="">
+                        <h5>iPhone 11 Silicone Case - Black</h5>
+                     </div>
+                     <div class="col-md-5 center-item">
+                        <div class="input-group number-spinner">
+                           <button onclick="productCount(false, 'item2')" id="item2-decrement"
+                              class="btn btn-default"><i class="fas fa-minus"></i></button>
+                           <input id="total-item2" type="text" class="form-control text-center" value="1">
+                           <button onclick="productCount(true, 'item2')" id="item2-increment" class="btn btn-default"><i
+                                 class="fas fa-plus"></i></button>
+
+                        </div>
+                        <h5 id="item2-price">$59</h5>
+                        <img onclick="removeItem('item-2', 'cart-2')" src="images/remove.png" alt=""
+                           class="remove-item">
+                     </div>
+                  </div>
+               </div>
+
+               <div class="cart-item">
+                  <div class="row">
+
+                     <div class="col-md-8">
+                        <h5>Subtotal: </h5>
+                        <h5>Tax (3% of Subtotal):</h5>
+                        <h5>Total:</h5>
+                     </div>
+
+                     <div class="col-md-4 status">
+                        <h5 id="sub-total">$1278</h5>
+                        <h5 id="tax">$38</h5>
+                        <h5 id="total">$1316</h5>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-md-12 pt-4 pb-4">
+                  <button onclick="checkout()" type="button" class="btn btn-success check-out">Check Out</button>
+               </div>
+            </div>
+         </div>
+      </div>
+   </section>
+   <section id="user-detail">
+      <div class="container">
+         <div class="row">
+            <div class="col-md-12 my-5 form">
+               <input type="text" name="" id="" class="form-control my-3" placeholder="First Name">
+               <input type="text" name="" id="" class="form-control mb-3" placeholder="Last Name">
+               <input type="email" name="" id="" class="form-control mb-3" placeholder="Email">
+               <input type="text" name="" id="" class="form-control mb-3" placeholder="Phone No">
+               <input type="text" name="" id="" class="form-control mb-3" placeholder="Address">
+               <button class="btn btn-success mb-3">Submit</button>
+            </div>
+         </div>
+      </div>
+   </section>
+   <script>
+
+      function productCount(isIncrease, itemNumber)
+      {
+         let totalSpecificItemNumber = getInputNumber(itemNumber);
+
+         if (isIncrease == false && totalSpecificItemNumber > 0)
+         {
+            totalSpecificItemNumber = totalSpecificItemNumber - 1;
+         }
+         if (isIncrease == true)
+         {
+            totalSpecificItemNumber = totalSpecificItemNumber + 1;
+         }
+
+         document.getElementById('total-' + itemNumber).value = totalSpecificItemNumber;
+
+         let itemCost = document.getElementById(itemNumber + '-price');
+
+         if (itemNumber == 'item1')
+         {
+            itemCost = totalSpecificItemNumber * 1219;
+         }
+         if (itemNumber == 'item2')
+         {
+            itemCost = totalSpecificItemNumber * 59;
+         }
+         document.getElementById(itemNumber + '-price').innerText = '$' + itemCost;
+         calculatePrice();
+      }
+
+
+      function getInputNumber(itemNumber)
+      {
+         const totalItem = document.getElementById('total-' + itemNumber);
+         let totalItemNumber = parseInt(totalItem.value);
+         return totalItemNumber;
+      }
+
+
+      function calculatePrice()
+      {
+
+         totalItem1 = getInputNumber('item1');
+         totalItem2 = getInputNumber('item2');
+
+         subTotal = totalItem1 * 1219 + totalItem2 * 59;
+         document.getElementById('sub-total').innerText = '$' + subTotal;
+
+         calculateTaxAndTotal();
+      }
+
+
+      function calculateTaxAndTotal()
+      {
+         tax = Math.round(subTotal * 0.03);
+         document.getElementById('tax').innerText = '$' + tax;
+
+         total = subTotal + tax;
+         document.getElementById('total').innerText = '$' + total;
+      }
+
+
+      function removeItem(item, cartNumber)
+      {
+         document.getElementById(cartNumber).style.display = 'none';
+         if (cartNumber == 'cart-1')
+         {
+            document.getElementById('total-item1').value = 0;
+         }
+         if (cartNumber == 'cart-2')
+         {
+            document.getElementById('total-item2').value = 0;
+         }
+
+         subTotal = parseInt(document.getElementById('total-item1').value) * 1219 + parseInt(document.getElementById('total-item2').value) * 59;
+         document.getElementById('sub-total').innerText = '$' + subTotal;
+
+         calculateTaxAndTotal()
+      }
+
+
+      function checkout()
+      {
+         document.getElementById('cart-view').style.display = 'none';
+         document.getElementById('user-detail').style.display = 'block';
+      }
+   </script>
+</body>
+
+</html>
